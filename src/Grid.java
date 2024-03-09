@@ -14,7 +14,8 @@ public class Grid {
     private int lines;
 
     // Gravity constants designed to scale up by level https://harddrop.com/wiki/Tetris_Worlds
-    private final double[] GRAVITY = new double[] { 0.01667, 0.021017, 0.026977, 0.035256, 0.04693, 0.06361, 0.0879, 0.1236, 0.1775, 0.2598, 0.388, 0.59, 0.92, 1.46, 2.36 };
+    private final double[] GRAVITY = new double[] { 0.01667, 0.021017, 0.026977, 0.035256, 0.04693, 0.06361, 0.0879,
+            0.1236, 0.1775, 0.2598, 0.388, 0.59, 0.92, 1.46, 2.36 };
     private int dropRate;
     private int ticksTillDrop = dropRate;
 
@@ -109,20 +110,20 @@ public class Grid {
         }
 
         switch (linesCleared) {
-        case 1:
-            scoreGained = 100;
-            break;
-        case 2:
-            scoreGained = 300;
-            break;
-        case 3:
-            scoreGained = 500;
-            break;
-        case 4:
-            scoreGained = 800;
-            break;
-        default:
-            break;
+            case 1:
+                scoreGained = 100;
+                break;
+            case 2:
+                scoreGained = 300;
+                break;
+            case 3:
+                scoreGained = 500;
+                break;
+            case 4:
+                scoreGained = 800;
+                break;
+            default:
+                break;
         }
 
         score += scoreGained * level;
@@ -151,12 +152,10 @@ public class Grid {
     public void drawSideContainers(Graphics g) {
         g.setColor(Color.DARK_GRAY);
         g.drawRect((int) (UI_TILE_SIZE * 15.5), (int) (UI_TILE_SIZE * 1.5), UI_TILE_SIZE * 4, UI_TILE_SIZE * 15); // Queue - right side
-        int holdBoxHeight = 4;
+        final int holdBoxHeight = 4;
 
-        if (heldTetromino != null && heldTetromino.getType() == TetrominoType.I)
-            holdBoxHeight = 5;
-
-        g.drawRect((int) (UI_TILE_SIZE * .5), (int) (UI_TILE_SIZE * 1.5), UI_TILE_SIZE * 4, UI_TILE_SIZE * holdBoxHeight); // Hold - left side
+        g.drawRect((int) (UI_TILE_SIZE * .5), (int) (UI_TILE_SIZE * 1.5), UI_TILE_SIZE * 4,
+                UI_TILE_SIZE * holdBoxHeight); // Hold - left side
     }
 
     public void drawGridLines(Graphics2D g) {
@@ -178,7 +177,8 @@ public class Grid {
             return;
 
         canHold = false;
-        Tetromino tempTetromino = heldTetromino == null ? null : new Tetromino(heldTetromino.getType(), COLUMNS / 2, HIDDEN_TOP_ROWS);
+        Tetromino tempTetromino = heldTetromino == null ? null
+                : new Tetromino(heldTetromino.getType(), COLUMNS / 2, HIDDEN_TOP_ROWS);
 
         heldTetromino = new Tetromino(currentTetromino.getType());
         if (tempTetromino == null) {
@@ -194,14 +194,16 @@ public class Grid {
             for (int c = 0; c < COLUMNS; c++) {
                 if (grid[r][c] != 0) {
                     g.setColor(TetrominoType.getColor(grid[r][c]));
-                    g.fillRect(c * TILE_SIZE + GRID_WIDTH / 2, r * TILE_SIZE - TILE_SIZE * HIDDEN_TOP_ROWS, TILE_SIZE, TILE_SIZE);
+                    g.fillRect(c * TILE_SIZE + GRID_WIDTH / 2, r * TILE_SIZE - TILE_SIZE * HIDDEN_TOP_ROWS, TILE_SIZE,
+                            TILE_SIZE);
                 }
             }
         }
     }
 
     public void drawHold(Graphics g) {
-        GraphicsPanel.drawCenteredString(g, "HOLD", Color.WHITE, (int) (100 * SCALE), (int) (4 * SCALE), (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, "HOLD", Color.WHITE, (int) (100 * SCALE), (int) (4 * SCALE),
+                (int) (30 * SCALE));
 
         if (heldTetromino == null)
             return;
@@ -214,14 +216,15 @@ public class Grid {
             int y = UI_TILE_SIZE * 2 + p.x * UI_TILE_SIZE;
 
             switch (heldTetromino.getType()) {
-            case O:
-                x += UI_TILE_SIZE / 2;
-                break;
-            case I:
-                x += UI_TILE_SIZE;
-                break;
-            default:
-                break;
+                case O:
+                    x += UI_TILE_SIZE / 2;
+                    break;
+                case I:
+                    x -= UI_TILE_SIZE / 2;
+                    y += UI_TILE_SIZE;
+                    break;
+                default:
+                    break;
             }
 
             g.fillRect(x, y, UI_TILE_SIZE, UI_TILE_SIZE);
@@ -233,14 +236,20 @@ public class Grid {
         g.drawRect((int) (UI_TILE_SIZE * .5), (int) (UI_TILE_SIZE * 7), UI_TILE_SIZE * 4, UI_TILE_SIZE * 6); // Border
 
         // Headers
-        GraphicsPanel.drawCenteredString(g, "SCORE", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 7), (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, "LEVEL", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 9), (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, "LINES", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 11), (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, "SCORE", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 7),
+                (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, "LEVEL", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 9),
+                (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, "LINES", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 11),
+                (int) (30 * SCALE));
 
         // Labels
-        GraphicsPanel.drawCenteredString(g, score + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 8), (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, level + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 10), (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, lines + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 12), (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, score + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 8),
+                (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, level + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 10),
+                (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, lines + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 12),
+                (int) (30 * SCALE));
     }
 
     public void nextTetrimino() {
@@ -278,7 +287,8 @@ public class Grid {
         Point[] shape = tetrimino.getPoints();
         for (int i = 0; i < shape.length; i++) {
             g.setColor(tetrimino.getColor());
-            g.fillRect(shape[i].y * TILE_SIZE + GRID_WIDTH / 2, shape[i].x * TILE_SIZE - HIDDEN_TOP_ROWS * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            g.fillRect(shape[i].y * TILE_SIZE + GRID_WIDTH / 2, shape[i].x * TILE_SIZE - HIDDEN_TOP_ROWS * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE);
         }
     }
 
@@ -293,20 +303,21 @@ public class Grid {
                 int y = p.x * UI_TILE_SIZE + UI_TILE_SIZE * i * 5 + UI_TILE_SIZE * 2;
 
                 switch (tetromino.getType()) {
-                case O:
-                    x += UI_TILE_SIZE / 2;
-                    break;
-                case I:
-                    x -= UI_TILE_SIZE / 2;
-                    break;
-                default:
-                    break;
+                    case O:
+                        x += UI_TILE_SIZE / 2;
+                        break;
+                    case I:
+                        x -= UI_TILE_SIZE / 2;
+                        break;
+                    default:
+                        break;
                 }
                 g.fillRect(x, y, UI_TILE_SIZE, UI_TILE_SIZE);
             }
         }
 
-        GraphicsPanel.drawCenteredString(g, "NEXT", Color.WHITE, (int) (700 * SCALE), (int) (4 * SCALE), (int) (30 * SCALE));
+        GraphicsPanel.drawCenteredString(g, "NEXT", Color.WHITE, (int) (700 * SCALE), (int) (4 * SCALE),
+                (int) (30 * SCALE));
     }
 
     public Tetromino getNextTetromino() {
