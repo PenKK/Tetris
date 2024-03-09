@@ -21,7 +21,7 @@ public class Grid {
 
     private final int COLUMNS;
     private final int ROWS;
-    private final int HIDDEN_TOP_ROWS = 2;
+    private final int PITY_ROWS = 2;
     private double SCALE;
 
     private final int TILE_SIZE;
@@ -48,7 +48,7 @@ public class Grid {
         this.TILE_SIZE = GRID_WIDTH / COLUMNS;
         this.UI_TILE_SIZE = (int) (GRID_WIDTH / 10);
 
-        grid = new char[ROWS + HIDDEN_TOP_ROWS][COLUMNS];
+        grid = new char[ROWS + PITY_ROWS][COLUMNS];
         updateDropRate();
         canHold = true;
 
@@ -96,7 +96,7 @@ public class Grid {
         int scoreGained = 0;
         boolean isFull = true;
 
-        for (int r = 0; r < HIDDEN_TOP_ROWS + ROWS; r++) {
+        for (int r = 0; r < PITY_ROWS + ROWS; r++) {
             isFull = true;
             for (int c = 0; c < COLUMNS; c++) {
                 if (grid[r][c] == 0)
@@ -178,7 +178,7 @@ public class Grid {
 
         canHold = false;
         Tetromino tempTetromino = heldTetromino == null ? null
-                : new Tetromino(heldTetromino.getType(), COLUMNS / 2, HIDDEN_TOP_ROWS);
+                : new Tetromino(heldTetromino.getType(), COLUMNS / 2, PITY_ROWS);
 
         heldTetromino = new Tetromino(currentTetromino.getType());
         if (tempTetromino == null) {
@@ -190,11 +190,11 @@ public class Grid {
 
     public void drawLocked(Graphics2D g) {
         g.setColor(Color.WHITE);
-        for (int r = 0; r < ROWS + HIDDEN_TOP_ROWS; r++) {
+        for (int r = 0; r < ROWS + PITY_ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 if (grid[r][c] != 0) {
                     g.setColor(TetrominoType.getColor(grid[r][c]));
-                    g.fillRect(c * TILE_SIZE + GRID_WIDTH / 2, r * TILE_SIZE - TILE_SIZE * HIDDEN_TOP_ROWS, TILE_SIZE,
+                    g.fillRect(c * TILE_SIZE + GRID_WIDTH / 2, r * TILE_SIZE - TILE_SIZE * PITY_ROWS, TILE_SIZE,
                             TILE_SIZE);
                 }
             }
@@ -258,7 +258,7 @@ public class Grid {
 
         int i = 0;
         while (!checkGridEmpty(currentTetromino.getPoints())) { // If the default spawn location is occupied, move up
-            if (i >= HIDDEN_TOP_ROWS) { // If there are no free spots end the game
+            if (i >= PITY_ROWS) { // If there are no free spots end the game
                 gameOver = true;
                 return;
             }
@@ -287,7 +287,7 @@ public class Grid {
         Point[] shape = tetrimino.getPoints();
         for (int i = 0; i < shape.length; i++) {
             g.setColor(tetrimino.getColor());
-            g.fillRect(shape[i].y * TILE_SIZE + GRID_WIDTH / 2, shape[i].x * TILE_SIZE - HIDDEN_TOP_ROWS * TILE_SIZE,
+            g.fillRect(shape[i].y * TILE_SIZE + GRID_WIDTH / 2, shape[i].x * TILE_SIZE - PITY_ROWS * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE);
         }
     }
@@ -321,7 +321,7 @@ public class Grid {
     }
 
     public Tetromino getNextTetromino() {
-        return new Tetromino((int) (Math.random() * TetrominoType.values().length), COLUMNS / 2 - 1, HIDDEN_TOP_ROWS);
+        return new Tetromino((int) (Math.random() * TetrominoType.values().length), COLUMNS / 2 - 1, PITY_ROWS);
     }
 
     public boolean moveTetrominoDown() {
