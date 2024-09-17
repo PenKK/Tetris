@@ -48,6 +48,10 @@ public class Grid {
         this.TILE_SIZE = GRID_WIDTH / COLUMNS;
         this.UI_TILE_SIZE = (int) (GRID_WIDTH / 10);
 
+        init();
+    }
+
+    public void init() {
         grid = new char[ROWS + PITY_ROWS][COLUMNS];
         updateDropRate();
         canHold = true;
@@ -60,7 +64,19 @@ public class Grid {
         nextTetrimino();
     }
 
+    public void reset() {
+        score = 0;
+        level = startingLevel;
+        lines = 0;
+
+        init();
+        gameOver = false;
+    }
+
     public void tick() {
+        if (gameOver)
+            return;
+
         ticksTillDrop--;
 
         if (ticksTillDrop < 0) {

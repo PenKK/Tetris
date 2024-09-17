@@ -26,7 +26,8 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         addKeyListener(this);
         this.setFocusable(true);
         // Dimension is calculated by the tile size and rows/columns
-        this.setPreferredSize(new Dimension((int) (grid.getTileSize() * grid.getColumns() * 2), grid.getTileSize() * grid.getRows() + 1));
+        this.setPreferredSize(new Dimension((int) (grid.getTileSize() * grid.getColumns() * 2),
+                grid.getTileSize() * grid.getRows() + 1));
         this.setBackground(Color.BLACK);
 
         try {
@@ -78,12 +79,11 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
     private void updateObjects() {
         grid.tick();
-
-        running = !grid.isGameOver();
     }
 
     public void resetGame() {
-        grid = new Grid(grid.getRows(), 1, grid.getScale());
+        System.out.println("Restarting");
+        grid.reset();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         grid.drawSideContainers(g);
         grid.drawScore(g);
 
-        if (running) {
+        if (!grid.isGameOver()) {
             grid.drawTempTetromino(g, grid.getGhostTetromino());
             grid.drawTempTetromino(g, grid.getCurrentTetromino());
             grid.drawQueueTetrominos(g);
@@ -118,7 +118,10 @@ public class GraphicsPanel extends JPanel implements KeyListener {
     public void drawGameEnd(Graphics g) {
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(grid.getGridWidth() / 2, 0, grid.getGridWidth() + 1, grid.getGridHeight() + 1);
-        drawCenteredString(g, "You lose!", Color.WHITE, grid.getGridWidth(), (int) (50 * grid.getScale()), grid.getUITileSize());
+        drawCenteredString(g, "You lose!", Color.WHITE, grid.getGridWidth(), (int) (50 * grid.getScale()),
+                grid.getUITileSize());
+        drawCenteredString(g, "Press R to play again", Color.WHITE, grid.getGridWidth(),
+                (int) (50 * grid.getScale()) * 2, grid.getUITileSize());
     }
 
     @Override
@@ -128,33 +131,36 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (!running)
+        if (e.getKeyCode() == KeyEvent.VK_R && grid.isGameOver()) {
+            resetGame();
+        }
+        if (grid.isGameOver())
             return;
 
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_RIGHT:
-            grid.moveTetrominoRight();
-            break;
-        case KeyEvent.VK_LEFT:
-            grid.moveTetrominoLeft();
-            break;
-        case KeyEvent.VK_UP:
-            grid.rotate(false);
-            break;
-        case KeyEvent.VK_SPACE:
-            grid.dropTetromino();
-            break;
-        case KeyEvent.VK_DOWN:
-            grid.moveTetrominoDown();
-            break;
-        case KeyEvent.VK_CONTROL:
-            grid.rotate(true);
-            break;
-        case KeyEvent.VK_C:
-            grid.hold();
-            break;
-        default:
-            break;
+            case KeyEvent.VK_RIGHT:
+                grid.moveTetrominoRight();
+                break;
+            case KeyEvent.VK_LEFT:
+                grid.moveTetrominoLeft();
+                break;
+            case KeyEvent.VK_UP:
+                grid.rotate(false);
+                break;
+            case KeyEvent.VK_SPACE:
+                grid.dropTetromino();
+                break;
+            case KeyEvent.VK_DOWN:
+                grid.moveTetrominoDown();
+                break;
+            case KeyEvent.VK_CONTROL:
+                grid.rotate(true);
+                break;
+            case KeyEvent.VK_C:
+                grid.hold();
+                break;
+            default:
+                break;
         }
     }
 
