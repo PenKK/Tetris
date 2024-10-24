@@ -128,7 +128,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
-
+    
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_R && grid.isGameOver()) {

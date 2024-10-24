@@ -234,12 +234,14 @@ public class Grid {
             switch (heldTetromino.getType()) {
                 case O:
                     x += UI_TILE_SIZE / 2;
+                    y += UI_TILE_SIZE / 2;
                     break;
                 case I:
                     x -= UI_TILE_SIZE / 2;
                     y += UI_TILE_SIZE;
                     break;
                 default:
+                    y += UI_TILE_SIZE / 2;
                     break;
             }
 
@@ -359,7 +361,6 @@ public class Grid {
 
         if (ticksTillDrop > dropRate && currentTetromino.canMoveDown(grid)) {
             ticksTillDrop = dropRate / 2;
-            System.out.println("e");
         }
     }
 
@@ -370,7 +371,6 @@ public class Grid {
 
         if (ticksTillDrop > dropRate && currentTetromino.canMoveDown(grid)) {
             ticksTillDrop = dropRate / 2;
-            System.out.println("e");
         }
     }
 
