@@ -9,6 +9,7 @@ public class Tetromino {
     private Color color;
     private char character;
     private int[] offsetFromOrigin; // Tracks displacement from 0, 0 so that the rotation transformations can be applied
+    private int lockTimer;
 
     Tetromino(TetrominoType type) {
         this.type = type;
@@ -16,6 +17,7 @@ public class Tetromino {
         this.color = type.getColor();
         this.character = type.getCharacter();
         this.offsetFromOrigin = type.getRotateOrigin().clone();
+        this.lockTimer = -1;
     }
 
     Tetromino(TetrominoType type, int column, int row) {
@@ -24,6 +26,7 @@ public class Tetromino {
         this.color = type.getColor();
         this.character = type.getCharacter();
         this.offsetFromOrigin = type.getRotateOrigin().clone();
+        this.lockTimer = -1;
 
         for (int i = 0; i < column; i++) {
             this.moveSide(true);
@@ -52,6 +55,7 @@ public class Tetromino {
         this.color = type.getColor();
         this.character = type.getCharacter();
         this.offsetFromOrigin = type.getRotateOrigin().clone();
+        this.lockTimer = -1;
 
         for (int i = 0; i < column; i++) {
             this.moveSide(true);
@@ -66,6 +70,7 @@ public class Tetromino {
         this.color = type.getColor();
         this.character = type.getCharacter();
         this.offsetFromOrigin = type.getRotateOrigin().clone();
+        this.lockTimer = -1;
 
         for (int i = 0; i < column; i++) {
             this.moveSide(true);
@@ -231,6 +236,10 @@ public class Tetromino {
     public void setCharacter(char character) {
         this.character = character;
     }
+
+    public int getLockTimer() { return lockTimer; }
+
+    public void setLockTimer(int lockTimer) { this.lockTimer = lockTimer; }
 
     public Tetromino getCopy() {
         Tetromino tetromino = new Tetromino(this.type);

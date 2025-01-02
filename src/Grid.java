@@ -88,6 +88,11 @@ public class Grid {
             }
         }
 
+        if (currentTetromino.getLockTimer() == 0) {
+            addToGrid(currentTetromino, false);
+        } else if (currentTetromino.getLockTimer() != -1) {
+            currentTetromino.setLockTimer(currentTetromino.getLockTimer() - 1);
+        }
     }
 
     // GRID LOGIC
@@ -342,35 +347,24 @@ public class Grid {
         return new Tetromino((int) (Math.random() * TetrominoType.values().length), COLUMNS / 2 - 1, PITY_ROWS);
     }
 
-    public boolean moveTetrominoDown() {
+    public void moveTetrominoDown() {
         if (currentTetromino.canMoveDown(grid)) {
             currentTetromino.moveDown();
             ticksTillDrop = dropRate;
-
-            return false;
+        } else if (currentTetromino.getLockTimer() == -1) {
+            currentTetromino.setLockTimer(500);
         }
-
-        addToGrid(currentTetromino, false);
-        return true; // The boolean indicates if the piece was added to grid
     }
 
     public void moveTetrominoRight() {
         if (currentTetromino.canMoveSide(grid, true)) {
             currentTetromino.moveSide(true);
         }
-
-        if (ticksTillDrop > dropRate && currentTetromino.canMoveDown(grid)) {
-            ticksTillDrop = dropRate / 2;
-        }
     }
 
     public void moveTetrominoLeft() {
         if (currentTetromino.canMoveSide(grid, false)) {
             currentTetromino.moveSide(false);
-        }
-
-        if (ticksTillDrop > dropRate && currentTetromino.canMoveDown(grid)) {
-            ticksTillDrop = dropRate / 2;
         }
     }
 
@@ -391,7 +385,7 @@ public class Grid {
         int R = ghostTetromino.getColor().getRed() + 200;
         int G = ghostTetromino.getColor().getGreen() + 200;
         int B = ghostTetromino.getColor().getBlue() + 200;
-        ghostTetromino.setColor(new Color(R > 255 ? 255 : R, G > 255 ? 255 : G, B > 255 ? 255 : B));
+        ghostTetromino.setColor(new Color(Math.min(R, 255), Math.min(G, 255), Math.min(B, 255)));
 
         while (ghostTetromino.canMoveDown(grid)) {
             ghostTetromino.moveDown();

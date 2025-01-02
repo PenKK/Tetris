@@ -12,7 +12,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 public class GraphicsPanel extends JPanel implements KeyListener {
-    private Grid grid;
+    private final Grid grid;
 
     private final int TICK_DELAY = 5;
     private final int FPS = 60;
