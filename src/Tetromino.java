@@ -37,31 +37,6 @@ public class Tetromino {
         }
     }
 
-    Tetromino(int typeIndex) {
-        TetrominoType[] types = TetrominoType.values();
-
-        this.type = types[typeIndex];
-        this.points = type.getShape();
-        this.color = type.getColor();
-        this.character = type.getCharacter();
-        this.offsetFromOrigin = type.getRotateOrigin().clone();
-    }
-
-    Tetromino(int typeIndex, int column) {
-        TetrominoType[] types = TetrominoType.values();
-
-        this.type = types[typeIndex];
-        this.points = type.getShape().clone();
-        this.color = type.getColor();
-        this.character = type.getCharacter();
-        this.offsetFromOrigin = type.getRotateOrigin().clone();
-        this.lockTimer = -1;
-
-        for (int i = 0; i < column; i++) {
-            this.moveSide(true);
-        }
-    }
-
     Tetromino(int typeIndex, int column, int row) {
         TetrominoType[] types = TetrominoType.values();
 
@@ -101,9 +76,9 @@ public class Tetromino {
     }
 
     public boolean canMoveDown(char[][] board) {
-        for (int i = 0; i < points.length; i++) {
+        for (Point point : points) {
             try {
-                if (board[points[i].x + 1][points[i].y] != 0) {
+                if (board[point.x + 1][point.y] != 0) {
                     return false;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -128,10 +103,10 @@ public class Tetromino {
     }
 
     public boolean canMoveSide(char[][] board, boolean rightSide) {
-        for (int i = 0; i < points.length; i++) {
+        for (Point point : points) {
             try {
-                int pieceX = points[i].x;
-                int pieceY = points[i].y;
+                int pieceX = point.x;
+                int pieceY = point.y;
                 if (board[pieceX][pieceY + (rightSide ? 1 : -1)] != 0) {
                     return false;
                 }
@@ -170,8 +145,8 @@ public class Tetromino {
         tempPoints = returnOffset(tempPoints);
 
         try {
-            for (int i = 0; i < tempPoints.length; i++) {
-                if (board[tempPoints[i].x][tempPoints[i].y] != 0) {
+            for (Point tempPoint : tempPoints) {
+                if (board[tempPoint.x][tempPoint.y] != 0) {
                     return false;
                 }
             }
@@ -183,8 +158,8 @@ public class Tetromino {
 
     private Point[] removeOffset(Point[] pts) {
         Point[] newPoints = pts.clone();
-        for (int i = 0; i < newPoints.length; i++) {
-            newPoints[i].translate(-offsetFromOrigin[1], -offsetFromOrigin[0]);
+        for (Point newPoint : newPoints) {
+            newPoint.translate(-offsetFromOrigin[1], -offsetFromOrigin[0]);
         }
         return newPoints;
     }
@@ -199,8 +174,8 @@ public class Tetromino {
 
     private Point[] returnOffset(Point[] pts) {
         Point[] newPoints = pts.clone();
-        for (int i = 0; i < newPoints.length; i++) {
-            newPoints[i].translate(offsetFromOrigin[1], offsetFromOrigin[0]);
+        for (Point newPoint : newPoints) {
+            newPoint.translate(offsetFromOrigin[1], offsetFromOrigin[0]);
         }
         return newPoints;
     }
@@ -217,10 +192,6 @@ public class Tetromino {
         return type;
     }
 
-    public void setType(TetrominoType type) {
-        this.type = type;
-    }
-
     public Color getColor() {
         return color;
     }
@@ -231,10 +202,6 @@ public class Tetromino {
 
     public char getCharacter() {
         return character;
-    }
-
-    public void setCharacter(char character) {
-        this.character = character;
     }
 
     public int getLockTimer() { return lockTimer; }

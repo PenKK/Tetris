@@ -8,8 +8,8 @@ import java.util.LinkedList;
 public class Grid {
     private boolean gameOver = false;
     private int score = 0;
-    private int level = 1;
-    private int startingLevel;
+    private int level;
+    private final int startingLevel;
     // private int combo = 0; 
     private int lines;
 
@@ -22,7 +22,7 @@ public class Grid {
     private final int COLUMNS;
     private final int ROWS;
     private final int PITY_ROWS = 2;
-    private double SCALE;
+    private final double SCALE;
 
     private final int TILE_SIZE;
     private final int UI_TILE_SIZE;
@@ -46,7 +46,7 @@ public class Grid {
         this.GRID_WIDTH = (int) (400 * scale);
         this.GRID_HEIGHT = GRID_WIDTH * 2;
         this.TILE_SIZE = GRID_WIDTH / COLUMNS;
-        this.UI_TILE_SIZE = (int) (GRID_WIDTH / 10);
+        this.UI_TILE_SIZE = GRID_WIDTH / 10;
 
         init();
     }
@@ -61,7 +61,7 @@ public class Grid {
             queue.push(getNextTetromino());
         }
 
-        nextTetrimino();
+        nextTetromino();
     }
 
     public void reset() {
@@ -105,24 +105,23 @@ public class Grid {
             score += doublePlaceScore ? 2 : 1;
         }
 
-        // print2DArray(grid);
-
         canHold = true;
         lineClearCheck();
-        nextTetrimino();
+        nextTetromino();
     }
 
     public void lineClearCheck() {
         int linesCleared = 0;
         int scoreGained = 0;
-        boolean isFull = true;
+        boolean isFull;
 
         for (int r = 0; r < PITY_ROWS + ROWS; r++) {
             isFull = true;
             for (int c = 0; c < COLUMNS; c++) {
-                if (grid[r][c] == 0)
+                if (grid[r][c] == 0) {
                     isFull = false;
-
+                    break;
+                }
             }
             if (isFull) {
                 linesCleared++;
@@ -181,7 +180,7 @@ public class Grid {
 
     public void drawGridLines(Graphics2D g) {
         g.setColor(Color.GRAY);
-        // Verticle grid
+        // Vertical grid
         for (int c = 0; c < COLUMNS + 1; c++) {
             g.drawLine(c * TILE_SIZE + GRID_WIDTH / 2, 0, c * TILE_SIZE + GRID_WIDTH / 2, GRID_HEIGHT);
         }
@@ -203,7 +202,7 @@ public class Grid {
 
         heldTetromino = new Tetromino(currentTetromino.getType());
         if (tempTetromino == null) {
-            nextTetrimino();
+            nextTetromino();
         } else {
             currentTetromino = tempTetromino;
         }
@@ -230,9 +229,9 @@ public class Grid {
             return;
 
         g.setColor(heldTetromino.getColor());
-        Point[] tetominoPoints = heldTetromino.getPoints().clone();
+        Point[] tetrominoPoints = heldTetromino.getPoints().clone();
 
-        for (Point p : tetominoPoints) {
+        for (Point p : tetrominoPoints) {
             int x = UI_TILE_SIZE + p.y * UI_TILE_SIZE;
             int y = UI_TILE_SIZE * 2 + p.x * UI_TILE_SIZE;
 
@@ -256,26 +255,26 @@ public class Grid {
     }
 
     public void drawScore(Graphics g) {
-        g.drawRect((int) (UI_TILE_SIZE * .5), (int) (UI_TILE_SIZE * 7), UI_TILE_SIZE * 4, UI_TILE_SIZE * 6); // Border
+        g.drawRect((int) (UI_TILE_SIZE * .5),  (UI_TILE_SIZE * 7), UI_TILE_SIZE * 4, UI_TILE_SIZE * 6); // Border
 
         // Headers
-        GraphicsPanel.drawCenteredString(g, "SCORE", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 7),
+        GraphicsPanel.drawCenteredString(g, "SCORE", Color.WHITE, (int) (100 * SCALE),  (UI_TILE_SIZE * 7),
                 (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, "LEVEL", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 9),
+        GraphicsPanel.drawCenteredString(g, "LEVEL", Color.WHITE, (int) (100 * SCALE),  (UI_TILE_SIZE * 9),
                 (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, "LINES", Color.WHITE, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 11),
+        GraphicsPanel.drawCenteredString(g, "LINES", Color.WHITE, (int) (100 * SCALE),  (UI_TILE_SIZE * 11),
                 (int) (30 * SCALE));
 
         // Labels
-        GraphicsPanel.drawCenteredString(g, score + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 8),
+        GraphicsPanel.drawCenteredString(g, score + "", Color.GREEN, (int) (100 * SCALE),  (UI_TILE_SIZE * 8),
                 (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, level + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 10),
+        GraphicsPanel.drawCenteredString(g, level + "", Color.GREEN, (int) (100 * SCALE),  (UI_TILE_SIZE * 10),
                 (int) (30 * SCALE));
-        GraphicsPanel.drawCenteredString(g, lines + "", Color.GREEN, (int) (100 * SCALE), (int) (UI_TILE_SIZE * 12),
+        GraphicsPanel.drawCenteredString(g, lines + "", Color.GREEN, (int) (100 * SCALE),  (UI_TILE_SIZE * 12),
                 (int) (30 * SCALE));
     }
 
-    public void nextTetrimino() {
+    public void nextTetromino() {
         currentTetromino = queue.pop();
         queue.add(getNextTetromino());
 
@@ -298,19 +297,11 @@ public class Grid {
         return true;
     }
 
-    public void printQueue() {
-        System.out.println("");
-        for (Tetromino tetromino : queue) {
-            System.out.println(tetromino.getCharacter());
-        }
-        System.out.println("");
-    }
-
-    public void drawTempTetromino(Graphics g, Tetromino tetrimino) {
-        Point[] shape = tetrimino.getPoints();
-        for (int i = 0; i < shape.length; i++) {
-            g.setColor(tetrimino.getColor());
-            g.fillRect(shape[i].y * TILE_SIZE + GRID_WIDTH / 2, shape[i].x * TILE_SIZE - PITY_ROWS * TILE_SIZE,
+    public void drawTempTetromino(Graphics g, Tetromino tetromino) {
+        Point[] shape = tetromino.getPoints();
+        for (Point point : shape) {
+            g.setColor(tetromino.getColor());
+            g.fillRect(point.y * TILE_SIZE + GRID_WIDTH / 2, point.x * TILE_SIZE - PITY_ROWS * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE);
         }
     }
@@ -398,17 +389,17 @@ public class Grid {
     }
 
     public static void print2DArray(char[][] Matrix) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < Matrix.length; i++) {
             for (int j = 0; j < Matrix[0].length; j++) {
                 if (Matrix[i][j] != 0) {
-                    str += Matrix[i][j];
+                    str.append(Matrix[i][j]);
                 } else {
-                    str += '#';
+                    str.append('#');
                 }
 
             }
-            str += "\n";
+            str.append("\n");
         }
         System.out.println(str);
     }

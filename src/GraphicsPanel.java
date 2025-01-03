@@ -26,7 +26,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         addKeyListener(this);
         this.setFocusable(true);
         // Dimension is calculated by the tile size and rows/columns
-        this.setPreferredSize(new Dimension((int) (grid.getTileSize() * grid.getColumns() * 2),
+        this.setPreferredSize(new Dimension(grid.getTileSize() * grid.getColumns() * 2,
                 grid.getTileSize() * grid.getRows() + 1));
         this.setBackground(Color.BLACK);
 
@@ -35,13 +35,13 @@ public class GraphicsPanel extends JPanel implements KeyListener {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(mainFont);
         } catch (IOException | FontFormatException e) {
-            e.printStackTrace();
+            System.err.println("Main font not loaded");
         }
     }
 
     public void start() { // Game loop
         running = true;
-        long deltaT = 0;
+        long deltaT;
         long accumulatorT = 0;
         long lastUpdateT = System.currentTimeMillis();
         updateObjects();
@@ -70,7 +70,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.err.println("Failed to sleep to limit FPS");
                 }
             }
         }

@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Point;
 
 public enum TetrominoType {
-    // Points are (row, column) with 0,0 being at the top left corner
+    // Points are (row, column) with 0,0 being in the top left corner
     I(new Point[] { new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3) }, new Color(0, 240, 240), 'I', true, new int[] { 1, 0 }),
     J(new Point[] { new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(1, 2) }, new Color(0, 0, 240), 'J', true),
     L(new Point[] { new Point(0, 2), new Point(1, 0), new Point(1, 1), new Point(1, 2) }, new Color(240, 160, 0), 'L', true),
@@ -12,9 +12,9 @@ public enum TetrominoType {
     Z(new Point[] { new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 2) }, new Color(240, 0, 0), 'Z', true);
 
     private final Point[] shape;
-    private Color color;
+    private final Color color;
     private final char character;
-    private final int[] rotateOrigin; // The rotate origin is the point which the tetriminos will rotate around
+    private final int[] rotateOrigin; // The rotate origin is the point which the tetrominos will rotate around
     private final boolean rotatable;
 
     TetrominoType(Point[] shape, Color color, char character, boolean canRotate, int[] rotateOrigin) {
@@ -49,10 +49,6 @@ public enum TetrominoType {
 
     public Color getColor() {
         return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     public char getCharacter() {
