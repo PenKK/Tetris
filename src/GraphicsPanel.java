@@ -7,7 +7,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.awt.Color;
 import javax.swing.JPanel;
 
@@ -31,7 +33,9 @@ public class GraphicsPanel extends JPanel implements KeyListener {
         this.setBackground(Color.BLACK);
 
         try {
-            mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("lib\\fonts\\ChakraPetch-Medium.ttf"));
+            // Load font as a resource stream
+            InputStream fontStream = getClass().getResourceAsStream("/resources/fonts/ChakraPetch-Medium.ttf");
+            mainFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(mainFont);
         } catch (IOException | FontFormatException e) {
@@ -128,7 +132,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
-    
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_R && grid.isGameOver()) {
